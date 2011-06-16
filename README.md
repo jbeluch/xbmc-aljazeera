@@ -1,6 +1,6 @@
 Al Jazeera Addon for XBMC
 ========================
-version 0.7.1
+version 0.7.2
 
 ### Summary ###
 This is a plugin for [XBMC](http://xbmc.org) that enables watching videos and
