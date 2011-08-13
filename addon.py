@@ -179,7 +179,8 @@ def show_videos(list_id, start_index, count):
         'is_folder': False,
         'is_playable': True,
         'context_menu': [(
-            'Add to Now Playing', 
+            #'Add to Now Playing'
+            plugin.get_string(30300),
             'XBMC.RunPlugin(%s)' % plugin.url_for(
                 'playlist.add_to_playlist',
                 url=plugin.url_for('watch_video', videoid=video['videoid']),
