@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from xbmcswift import Plugin, download_page
 from xbmcswift.ext.playlist import playlist
-from resources.lib.getflashvideo import get_flashvideo_url, YouTube
 from BeautifulSoup import BeautifulSoup as BS, SoupStrainer as SS
 from urllib import urlencode
 from urlparse import urljoin
@@ -37,6 +36,11 @@ plugin.register_module(playlist, url_prefix='/_playlist')
 BASE_URL = 'http://english.aljazeera.net'
 def full_url(path):
     return urljoin(BASE_URL, path)
+
+YOUTUBE_PTN = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s'
+def youtube_url(videoid):
+    return YOUTUBE_PTN % (videoid)
+
 
 def parse_queryvideo_args(s):
     '''Parses a QueryVideos javascript call (string) and returns a 4 tuple.
@@ -150,7 +154,7 @@ def show_categories3(onclick_func, clips=False):
             'label': video['title'],
             'thumbnail': video['thumbnail'],
             'info': {'plot': video['summary'], },
-            'url': plugin.url_for('watch_video', videoid=video['videoid']),
+            'url': youtube_url(video['videoid']),
             'is_folder': False,
             'is_playable': True,
         })
@@ -175,7 +179,7 @@ def show_videos(list_id, start_index, count):
         'label': video['title'],
         'thumbnail': video['thumbnail'],
         'info': {'plot': video['summary'], },
-        'url': plugin.url_for('watch_video', videoid=video['videoid']),
+        'url': youtube_url(video['videoid']),
         'is_folder': False,
         'is_playable': True,
         'context_menu': [(
@@ -183,7 +187,7 @@ def show_videos(list_id, start_index, count):
             plugin.get_string(30300),
             'XBMC.RunPlugin(%s)' % plugin.url_for(
                 'playlist.add_to_playlist',
-                url=plugin.url_for('watch_video', videoid=video['videoid']),
+                url=youtube_url(video['videoid']),
                 label=video['title']
             )
         )],
@@ -205,11 +209,6 @@ def show_videos(list_id, start_index, count):
         })
 
     return plugin.add_items(items)
-
-@plugin.route('/watch/<videoid>/')
-def watch_video(videoid):
-    url = YouTube.get_flashvideo_url(videoid=videoid)
-    return plugin.set_resolved_url(url)
 
 
 if __name__ == '__main__': 
